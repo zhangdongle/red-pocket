@@ -43,7 +43,7 @@ module.exports = {
     // options below to some value.
     //
     development: {
-     host: "127.0.0.1",     // Localhost (default: none)
+     host: "192.168.1.118",     // Localhost (default: none)
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
@@ -67,12 +67,13 @@ module.exports = {
         skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
 
-    koven: {
+    test: {
         provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/4601681155a146cdb356961c5c5cc907`),
         network_id: 42,       // Ropsten's id
         gas: 5500000,        // Ropsten has a lower block limit than mainnet
         confirmations: 2,    // # of confs to wait between deployments. (default: 0)
         timeoutBlocks: 5000,  // # of blocks before a deployment times out  (minimum/default: 50)
+        networkCheckTimeout: 60000,
         skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
     // Useful for private networks

@@ -1,3 +1,7 @@
+// const math = require('/common/math.js');
+
+// var array = [1,2,3.4,6];
+// console.log(math.sum(array));
 // //执行定义变量来表示不同的合约
 // const Greeter  = artifacts.require('Greeter.sol');
 // //执行变量，便于进行更改

@@ -16,9 +16,6 @@ interface Erc20Token {
 contract Base {
     using SafeMath for uint;
 
-    // test
-    Erc20Token constant internal _usdtIns = Erc20Token(0x42A6717f1106f97774F900F83F0Ebc0f247328E0);
-
     // USDT汇率换算，USDT的精度是6，所以乘以1000000
     
     function usdtConvert(uint256 value) internal pure returns(uint256) {
