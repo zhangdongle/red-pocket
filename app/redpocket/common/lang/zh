@@ -1,0 +1,27 @@
+module.exports = {
+ message: {
+    title: '六度红包',
+    title2: '基于六度人脉理论',
+    title3: '用智能合约来验证你的人际长度',
+    send: '发红包',
+    pending: '等待红包',
+    balance_low: '余额不足',
+    upgrade_error_v2: '升v2需要直推最少3人',
+    upgrade_error_v5: '升v5需1至4阶人数至少81人',
+    copy_link:'复制游戏邀请链接',
+    copy_warn:'发送第一个红包即会出现邀请链接',
+    statistics:'当前统计',
+    invitees:'邀请人',
+    nothing:'无',
+    unbound:'未绑定',
+    bound:'已绑定',
+    current_level:'目前级',
+    total_level_count:'当前总人脉数',
+    level_count:'阶人脉数',
+
+    language: 'Language',
+    zh: 'Chinese',
+    en: 'English',
+
+ }
+}

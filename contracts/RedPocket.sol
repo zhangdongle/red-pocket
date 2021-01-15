@@ -1,7 +1,7 @@
 pragma solidity ^0.5.1;
 
-import './Ownable.sol';
-import './Base.sol';
+// import './Ownable.sol';
+// import './Base.sol';
 
 contract RedPocket is Ownable, Base{
   

@@ -108,7 +108,7 @@ contract('RedPocket', accounts => {
           token = instance;
         });
         console.log("Token合约地址：",token.address);
-        await RedPocket.new(companyAddrs, techAddrs , token.address, baseAmount).then(async res => {
+        await RedPocket.new(companyAddrs, techAddrs , token.address, baseAmount , 5).then(async res => {
             instance = res;
             console.log("合约地址",instance.address);
             // balance = await token.balanceOf(instance.address);
@@ -201,14 +201,17 @@ contract('RedPocket', accounts => {
       await sendPocket(c, { from: c, value: baseAmount});
       let p_count = await instance._pid();
       console.log("红包总数",p_count);
-      let rp = await instance._redPocketMap(p_count);
-      let to = rp['to'];// 红包的接收者
-      let toAddr = await instance._playerMap(to);
-      assert.equal(a,toAddr,"C玩家发的这个红包接收者应该是A");
-      await instance.getPlayerInfo({ from: c }).then(res => {
+      // let rp = await instance._redPocketMap(p_count);
+      // let to = rp['to'];// 红包的接收者
+      // let toAddr = await instance._playerMap(to);
+      // assert.equal(a,toAddr,"C玩家发的这个红包接收者应该是A");
+      await instance.getPlayerInfo({ from: c }).then(async res => {
           assert.equal(res[3].length,3,"C玩家直推人数应为3");
           assert.equal(res[1],b,"C玩家邀请人应为B");
           assert.equal(res[2],2,"C玩家应升为2级");
+          assert.equal(res[6].length,3,"C发出去的红包数量应为3");
+          let toAddr = await instance._playerMap(res[6][res[6].length-1]);
+          assert.equal(toAddr,a,"C玩家发的这个红包接收者应该是A");
       }).catch(err=>{
           console.log("异常4：", err.reason || err);
       });
@@ -220,12 +223,17 @@ contract('RedPocket', accounts => {
       await sendPocket(h, { from: h, value: baseAmount});
       let p_count = await instance._pid();
       console.log("红包总数",p_count);
-      
+
       await instance.getPlayerInfo({ from: c }).then(res => {
           assert.equal(res[4],6,"C玩家总推荐人数应为6");
           return instance.getPlayerInfo({ from: a });
       }).then(res => {
-          assert.equal(res[4],6,"A玩家总推荐人数应为11");
+          assert.equal(res[4],11,"A玩家总推荐人数应为11");
+          assert.equal(res[7].length,4,"A玩家收到的红包数量应为4");
+          return instance.getPlayerInfo({ from: h });
+      }).then(res => {
+          // 注：技术地址的id<=15
+          assert.equal(res[6][res[6].length-1]<=15,true,"H玩家发的这个红包接收者应该是一个技术地址");
       }).catch(err=>{
           console.log("异常4：", err.reason || err);
       });

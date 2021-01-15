@@ -102,7 +102,6 @@ contract('RedPocket', accounts => {
         // console.log("部署合约", res);
         companyAddrs = accounts.slice(1, 11);
         techAddrs = accounts.slice(11, 16);
-        // console.log(accounts);
         a_referers = accounts.slice(20,98);
         
         //构建合约(可以设置两种方式)

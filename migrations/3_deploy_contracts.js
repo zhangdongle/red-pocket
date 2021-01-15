@@ -12,24 +12,24 @@ let baseAmount = 100*(10**6);
 let token;
 let tokenaddress = "0x27f46f1F96E6788E16d54c6DfEAa3B3BDA623194";
 
-/**
-* 批量转账
-* addrs 转账地址数组
-* amount 单个地址金额，单位ether
- */
-async function batchTransfer(from, addrs, amount){
-  console.log("批量转账");
-  for(var i in addrs){
-    var addr = addrs[i];
-    token.transfer(addr,BN(amount).multipliedBy(10**6),{
-      from:from
-    }).then(res=>{
-        console.log("转账成功：", i, addr);
-    }).catch(err=>{
-        console.log(err);
-    });
-  }
-}
+// /**
+// * 批量转账
+// * addrs 转账地址数组
+// * amount 单个地址金额，单位ether
+//  */
+// async function batchTransfer(from, addrs, amount){
+//   console.log("批量转账");
+//   for(var i in addrs){
+//     var addr = addrs[i];
+//     token.transfer(addr,BN(amount).multipliedBy(10**6),{
+//       from:from
+//     }).then(res=>{
+//         console.log("转账成功：", i, addr);
+//     }).catch(err=>{
+//         console.log(err);
+//     });
+//   }
+// }
 
 module.exports = async function(deployer,network,accounts) {
     console.log("network：",network);
@@ -61,7 +61,7 @@ module.exports = async function(deployer,network,accounts) {
     
     console.log("USDT地址：",tokenaddress);
     let redpocket;
-    await deployer.deploy(RedPocket,companyAddrs,techAddrs,tokenaddress,baseAmount).then(res=>{
+    await deployer.deploy(RedPocket,companyAddrs,techAddrs,tokenaddress,baseAmount,5).then(res=>{
         redpocket = res;
     });
     console.log("红包合约地址：",redpocket.address);

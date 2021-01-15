@@ -8,11 +8,12 @@ contract RedPocketOfUSDT is Ownable, Base{
       // test
     Erc20Token internal _usdtIns;
 
-    constructor (address[10] memory companyAddress, address[5] memory techAddress, address token, uint256 baseAmount) Ownable() public {
+    constructor (address[10] memory companyAddress, address[5] memory techAddress, address token, uint256 baseAmount, uint8 fiveCount) Ownable() public {
         _companyAddresses = companyAddress;
         _techAddresses = techAddress;
         _usdtIns = Erc20Token(token);
         _baseAmount = baseAmount;
+        _fiveCount = fiveCount;
         for(uint64 i = 0;i<companyAddress.length;i++){
           _uid ++;
           register(_uid,companyAddress[i],address(0));
@@ -36,8 +37,9 @@ contract RedPocketOfUSDT is Ownable, Base{
       // address lastRecipient; // 上次接收红包的地址
       uint8 level;// 用户级别
       uint64[] directPushs; // 直推人信息
-      uint64[11] sendList; // 发出去的红包接收者
-      uint64[] receivedList; // 接收到的红包发送者ID
+      // uint64[] sendList; // 发出去的红包接收者
+      // uint64[] receivedList; // 接收到的红包发送者ID
+      uint64 receivedCount;
     }
 
     uint64 _rotationId; // 轮循ID，捡漏红包总数 retationId = companyId + techId;
@@ -51,12 +53,13 @@ contract RedPocketOfUSDT is Ownable, Base{
 
     // mapping(address=>uint64[]) msg.senders; // 某个地址发送的所有红包地址，1个人最多发送11个红包，可以按照下标来获取上级推荐人
     // mapping(address=>uint64[]) _recipients; // 某个地址接收的所有红包地址
-    uint256 public _baseUnit = 10 ** 6; // USDT精度
+    // uint256 public _baseUnit = 10 ** 6; // USDT精度
     uint8 constant private _companyCount = 10; // 公司地址数量
     uint8 constant private _techCount = 5; // 技术地址数量
     uint8 constant private _addressCount = _companyCount + _techCount;// 总的捡漏地址数量
     uint8 constant private _companyRate = 9; // 公司地址捡漏比例 9 代表 9:1
-    uint256 public _techFee = (30 / 10000) * 10 ** 18 ; // 技术服务费（万分位）
+    uint8 private _fiveCount; // 5级达标人数
+    // uint256 public _techFee = (30 / 10000) * 10 ** 18 ; // 技术服务费（万分位）
 
     address[10] private _companyAddresses; // 公司合约地址
     address[5] private _techAddresses; // 技术分红地址
@@ -126,11 +129,11 @@ contract RedPocketOfUSDT is Ownable, Base{
 
     function transfer(address from, address to ,uint value) private {
       _pid ++;
-      _players[from].sendList.push(_players[from].id);
-      _players[to].receivedList.push(_players[to].id);
+      // _players[from].sendList.push(_players[to].id);
+      // _players[to].receivedList.push(_players[from].id);
       _redPocketMap[_pid].from = _players[from].id;
       _redPocketMap[_pid].to = _players[to].id;
-
+      _players[to].receivedCount+=1;
       _usdtIns.transferFrom(from, to, value);
     }
 
@@ -139,6 +142,7 @@ contract RedPocketOfUSDT is Ownable, Base{
      */
     modifier canUpgrade(){
       uint8 level = _players[msg.sender].level;
+      // ETH版本需要打开这个验证
       // if(level==0 || level == 4){
       //   require(msg.value == _baseAmount*2, "The amount is wrong");
       // }
@@ -149,8 +153,8 @@ contract RedPocketOfUSDT is Ownable, Base{
         // 下线已经推荐了81个玩家
         uint8 maxDepth = 4; // 最大深度，即往下查几代
         uint8 depth = 1;
-        uint256 count = statisticDirectPushCount(_players[msg.sender].id,1,9);
-        require(count >= 81, "Not up to standard");
+        uint256 count = statisticDirectPushCount(_players[msg.sender].id,depth,maxDepth);
+        require(count >= _fiveCount, "Not up to standard");
       }      
       _;
     }
@@ -184,7 +188,8 @@ contract RedPocketOfUSDT is Ownable, Base{
     * [6]发送出去的红包接收者[]
     * [7]收到的红包发送者[]
      */
-    function getPlayerInfo() view public returns(uint64,address,uint8,uint64[] memory,uint256,uint256[9] memory,uint64[11] memory,uint64[] memory){
+    // function getPlayerInfo() view public returns(uint64,address,uint8,uint64[] memory,uint256,uint256[9] memory,uint64[] memory,uint64[] memory){
+    function getPlayerInfo() view public returns(uint64,address,uint8,uint64[] memory,uint256,uint256[9] memory,uint64){
       Player memory player = _players[msg.sender];
       // 获取9个等级的人数
       uint256[9] memory levelCount;
@@ -196,7 +201,8 @@ contract RedPocketOfUSDT is Ownable, Base{
         levelCount[i-1] = count;
         totalCount += count;
       }
-      return (player.id,player.referer,player.level,player.directPushs,totalCount,levelCount,player.sendList,player.receivedList);
+      // return (player.id,player.referer,player.level,player.directPushs,totalCount,levelCount,player.sendList,player.receivedList);
+      return (player.id,player.referer,player.level,player.directPushs,totalCount,levelCount,player.receivedCount);
     }
 
     /**

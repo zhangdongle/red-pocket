@@ -143,7 +143,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2966,
+                        "referencedDeclaration": 2987,
                         "src": "450:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -230,7 +230,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2966,
+                            "referencedDeclaration": 2987,
                             "src": "603:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -284,10 +284,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        2969,
-                        2970
+                        2990,
+                        2991
                       ],
-                      "referencedDeclaration": 2969,
+                      "referencedDeclaration": 2990,
                       "src": "595:7:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -665,7 +665,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2966,
+                        "referencedDeclaration": 2987,
                         "src": "450:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -752,7 +752,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2966,
+                            "referencedDeclaration": 2987,
                             "src": "603:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -806,10 +806,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        2969,
-                        2970
+                        2990,
+                        2991
                       ],
-                      "referencedDeclaration": 2969,
+                      "referencedDeclaration": 2990,
                       "src": "595:7:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -1095,7 +1095,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.5",
-  "updatedAt": "2021-01-13T07:54:46.600Z",
+  "updatedAt": "2021-01-14T04:02:45.115Z",
   "devdoc": {
     "details": "The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of \"user permissions\".",
     "methods": {

@@ -28,12 +28,24 @@
       <div class="btn2" style="height: 30px; line-height: 30px; width: 280px;">
         当前统计
       </div>
-      <div>邀请人：<span style="font-size:12px; font-weight: 400;">{{ player.referer ? player.referer + "（已绑定）" : referer ? referer+'（未绑定）':'无' }}</span></div>
+      <div>邀请人：<span style="font-size:12px; font-weight: 400;">{{ player.referer ? player.referer + "（已绑定）" : referer && player.id == 0 ? referer+'（未绑定）':'无' }}</span></div>
       <div>目前级：{{ player.level }}</div>
       <div>当前总人脉数：{{ player.allCount }}</div>
       <span v-for="(v, i) in player.levelCount" :key="i">
         {{ i + 1 }}阶人脉数：{{ v }}
       </span>
+      <div>
+        累计接收红包数：
+      </div>
+      <div>
+        {{player.receivedCount}}
+      </div>
+      <div>
+        累计接收红包：
+      </div>
+      <div>
+        {{player.receivedAmount}} USDT
+      </div>
     </div>
     <div class="btn2" style="height: 30px; line-height: 30px; width: 280px;">
       游戏规则
@@ -50,10 +62,10 @@
 
   2\合约地址：{{redpocketAddress}}
 
-  3\参与游戏只需要三个动作，发红包给其他人，邀请其他人参与游戏，提取其他人发给你的红包。
+  3\参与游戏只需要二个动作，发红包给其他人，邀请其他人参与游戏；之后等待其他人发给你的红包到你的地址。
 
   4\游戏规则：
-      发送红包约定为0.5ETH/个，1个地址最多发送11个红包；接收红包为0.5ETH/个；接收红包不限量，接收数量从你开始所产生的邀请关系越多，那么后续你所收到的红包就越多。
+      发送红包约定为100U/个，1个地址最多发送11个红包；接收红包为100U/个；接收红包不限量，接收数量从你开始所产生的邀请关系越多，那么后续你所收到的红包就越多。
 
       成为v1
       发送两个红包给其他两个参与地址即可成为v1，此时才可以邀请好友，并获得一阶地址的参与红包。
@@ -69,9 +81,9 @@
       成为v6
       v5后向一个地址发送一个红包，即可成为v6，此时六阶地址要成为v6时，都会向你发送一个红包。（同时享有v1-v5收取的红包权限）
       成为v7
-      v6后向一个地址发送一个红包，即可成为v7，此时七阶地址要成为v7时，都会向你发送一个红包。（同时享有v1-v5收取的红包权限）
+      v6后向一个地址发送一个红包，即可成为v7，此时七阶地址要成为v7时，都会向你发送一个红包。（同时享有v1-v6收取的红包权限）
       成为v8
-      v7后向一个地址发送一个红包，即可成为v8，此时八阶地址要成为v8时，都会向你发送一个红包。（同时享有v1-v5收取的红包权限）
+      v7后向一个地址发送一个红包，即可成为v8，此时八阶地址要成为v8时，都会向你发送一个红包。（同时享有v1-v7收取的红包权限）
       成为v9
       v8后向两个地址发送两个红包，即可成为v9，此时九阶地址要成为v9时，都会向你发送一个红包。且五阶地址成为v5时，都会向你发送一个红包。（同时享有v1-v8收取的红包权限）
       
@@ -79,25 +91,25 @@
 
   5\游戏理论效果： 
   每个参与用户若扩散3人且按照规则发送11个红包
-  总发出红包为0.5ETHx11=5.5ETH 
+  总发出红包为100Ux11=1100U
   v1累计收取红包 
-  3x0.5ETH=1.5ETH
+  3x100U=300U
   v2累计收取红包 
-  （3+9）x0.5ETH=6ETH 
+  （3+9）x100U=1200U 
   v3累计收取红包
-  （3+9+27）x0.5ETH=19.5ETH 
+  （3+9+27）x100U=3900U
   v4累计收取红包 
-  （3+9+27+81）x0.5ETH=60ETH
+  （3+9+27+81）x100U=12000U
   v5累计收取红包 
-  （3+9+27+81+243+243）x0.5ETH=303ETH 
+  （3+9+27+81+243+243）x100U=60600U
   v6累计收取红包
-  （3+9+27+81+243+243+729）x0.5ETH=667.5ETH 
+  （3+9+27+81+243+243+729）x100U=133500U 
   v7累计收取红包
-  （3+9+27+81+243+243+729+2187）x0.5ETH=1761ETH 
+  （3+9+27+81+243+243+729+2187）x100U=352200U 
   v8累计收取红包
-  （3+9+27+81+243+243+729+2187+6561）x0.5ETH=5041.5ETH 
+  （3+9+27+81+243+243+729+2187+6561）x100U=1008300U
   v9累计收取红包
-  （3+9+27+81+243+243+729+2187+6561+19683+243）x0.5ETH=15004.5ETH
+  （3+9+27+81+243+243+729+2187+6561+19683+243）x100U=3000900U
   </pre>
     </div>
     <div class="toast" v-show="toastShow">
@@ -123,7 +135,12 @@ export default {
         level: 0,
         allCount: 0,
         levelCount: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        directPushs: []
+        directPushs: [],
+        // sendList:[],
+        // receivedList:[],
+        receivedCount:0,
+        sendAmount:0,
+        receivedAmount:0,
       },
       domain: '',
       baseAmount: 0,
@@ -202,7 +219,7 @@ export default {
         from: this.account,
         value: this.web3.utils.toWei(this.player.amount+'','ether'),
         nonce: nonce,
-        gas: 200000
+        gas: 600000
       }).then(()=>{
         console.log("刷新玩家信息");
         this.initPlayerState();
@@ -245,8 +262,18 @@ export default {
       
     },
     sendPocket:async function(){
+      this.error = '';
       console.log("推荐人",this.referer);
       console.log("发送金额",this.player.amount);
+      // 升v2、v5前检查推广条件
+      if(this.player.level == 1 && this.player.directPushs.length<3){
+        this.error = '升2阶需要直推最少3人';
+        return;
+      }
+      if(this.player.level == 4 && this.player.allCount < 5){
+        this.error = '1-4阶邀请人数不足';
+        return;
+      }
       if(this.isTokenMode){
         this.sendByToken();
       }else{
@@ -291,12 +318,12 @@ export default {
     },
     initConfigState: async function(){
       if(this.isTokenMode){
-        this.redpocket._baseAmount().then(res=>{
+        await this.redpocket._baseAmount().then(res=>{
           this.baseAmount = BN(res).div(10**6).toFixed();
           console.log("基数", this.baseAmount);
         });
       }else{
-        this.redpocket._baseAmount().then(res=>{
+        await this.redpocket._baseAmount().then(res=>{
           this.baseAmount = this.web3.utils.fromWei(res,'ether');
             console.log("基数", this.baseAmount);
         });
@@ -324,7 +351,12 @@ export default {
       for(var j in player[3]){
         this.player.directPushs.push(BN(player[3][j]).toFixed());
       }
-      console.log(this.player.directPushs);
+      this.player.receivedCount = player[6];
+      this.player.receivedAmount = BN(player[6]).multipliedBy(this.baseAmount);
+      
+      // this.player.sendList = player[6];
+      // this.player.receivedList = player[7];
+      // console.log(this.player.directPushs);
     },
   },
 }
