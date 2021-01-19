@@ -17,7 +17,6 @@ contract Base {
     using SafeMath for uint;
 
     // USDT汇率换算，USDT的精度是6，所以乘以1000000
-    
     function usdtConvert(uint256 value) internal pure returns(uint256) {
         return value.mul(1000000);
     }

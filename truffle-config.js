@@ -47,6 +47,17 @@ module.exports = {
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
+
+    kovan: {
+      provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/4601681155a146cdb356961c5c5cc907`),
+      network_id: 42,       // Ropsten's id
+      gas: 5500000,        // Ropsten has a lower block limit than mainnet
+      confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 5000,  // # of blocks before a deployment times out  (minimum/default: 50)
+      networkCheckTimeout: 60000,
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+    },
+
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -92,7 +103,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      // version: "0.5.1",
+      version: "^0.5.0",
       parser: 'solcjs',
       // version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)

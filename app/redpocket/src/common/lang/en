@@ -1,0 +1,31 @@
+module.exports = {
+ message: {
+    title: 'SC Spread',
+    title2: 'Based on six degree contacts',
+    title3: 'Smart contract validates interpersonal relationship',
+    send: 'send out',
+    pending: 'Waiting to receive',
+    balance_low: 'Lack of money',
+    upgrade_error_v2: 'Recommend 3 people to upgrade to V2',
+    upgrade_error_v5: 'At least 81 people on floors 1 to 4',
+    copy_link:'Copy invitation link',
+    copy_success:'Copy success',
+    copy_warn:'Invitation link appears after first sending',
+    statistics:'Statistics',
+    invitees:'Invitees',
+    nothing:'be without',
+    unbound:'Unbound',
+    bound:'Bound',
+    current_level:'Current level',
+    total_level_count:'Total number',
+    level_count:'Number at level ',
+    received_count:'Total collection times',
+    received_amount:'Total amount charged',
+    language: 'Language',
+    rules_title: 'Rules',
+    zh: 'Chinese',
+    en: 'English',
+    rules: '  1\Based on the six degree network theory and ETAF contract calculation, it realizes the de trust and decentralized operation。\n\n  2\Contract address：0xa13a2e56cec020d77af4a867f1530d002c6abd10\n\n  3\You only need two actions to participate, send them to others, invite others to participate, and then wait for others to send them to your address through the smart contract.\n\n  4\Rules：\n      Sending agreement: one address can be sent up to 9 times; receiving is 0.1eth/address; receiving is unlimited. The more invitation relationships you generate from the beginning of receiving, the more you will receive in the future.\n\n      Become v1\n      Sending 0.2eth can become v1. At this time, you can invite and receive 0.1eth sent by first-order address.\n      (Note: the first level address refers to the participating address you invited, the second level address refers to the participating address you invited, and then the participating address you invited, and so on.)\n      Become V2\n      After becoming V1, send 0.1eth and invite three addresses to become V1, which can be v2. When the second-order address becomes V2, it will send 0.1eth to you. (while reserving your V1 license)\n      Become V3\n      After becoming V2, send 0.1eth, which can be v3. When the third-order address becomes V3, send 0.1eth to you. (while reserving your V1-V2 license)\n      Become V4\n      After becoming V3, send 0.1eth, can become V4, when the fourth-order address becomes V4, will send 0.1eth to you. (while reserving your V1-V3 license)\n      Become V5\n      After becoming V4, send 0.2eth, and at least 81 participating addresses in level 4 of your invitation relationship team can be V5. When level 5 addresses become V1 and V5, send 0.1eth to you. (while reserving your V1-V4 license)\n      Become V6\n      After becoming V5, send 0.1eth, which can become V6. When the sixth order address becomes V6, it will send 0.1eth to you. (while reserving your v1-v5 license)\n      Become V7\n      After becoming V6, you can send 0.1eth, which can be called v7. When the seventh order address becomes V7, you will be sent 0.1eth. (while reserving your V1-V6 license)\n      Become V8\n      After becoming V7, send 0.1eth, which can be called V8. When the eighth order address becomes V8, it will send 0.1eth to you. (while reserving your v1-v7 license)\n      Become V9\n      After becoming V8, you can send 0.1eth, which can be called V9. When the ninth order address becomes V9, you will be sent 0.1eth. And when the fifth order address becomes V5, 0.1eth will be sent to you. (while reserving your v1-v8 license)\n      \n      If you exceed your level, the contract will match with the technology team as a reward.\n\n  5\Game theory effect: \n  If each participating user spreads 3 people and sends 9 times according to the rules\n  Total issued：0.1ETHx7+0.2ETHx2=1.1ETH\n  V1 cumulative collection \n  3x0.1ETH=0.3ETH\n  V2 cumulative collection \n  （3+9）x0.1ETH=1.2ETH \n  V3 cumulative collection\n  （3+9+27）x0.1ETH=3.9ETH\n  V4 cumulative collection\n  （3+9+27+81）x0.1ETH=12ETH\n  V5 cumulative collection \n  （3+9+27+81+243+243）x0.1ETH=60.6ETH\n  V6 cumulative collection\n  （3+9+27+81+243+243+729）x0.1ETH=133.5ETH\n  V7 cumulative collection\n  （3+9+27+81+243+243+729+2187）x0.1ETH=352.2ETH\n  V8 cumulative collection\n  （3+9+27+81+243+243+729+2187+6561）x0.1ETH=1008.3ETH\n  V9 cumulative collection  （3+9+27+81+243+243+729+2187\n+6561+19683+243）x0.1ETH=3000.9ETH',
+    convert_lang: '切換繁體'
+ }
+}

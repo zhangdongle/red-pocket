@@ -1,6 +1,7 @@
 const RedPocket = artifacts.require("RedPocket");
 const constants = require("../common/constants.js")
-
+const BN = require('bignumber.js');
+let baseAmount = BN(0.001).multipliedBy(10**18).toFixed();
 module.exports = async function(deployer,network,accounts) {
     console.log("network：",network);
     let owner;
@@ -18,9 +19,17 @@ module.exports = async function(deployer,network,accounts) {
         techAddrs = constants.techAddrs;
     }
 
-    deployer.deploy(RedPocket, companyAddrs, techAddrs).then(res=>{
-        console.log("部署完成1");
-    }).catch(res=>{
-        console.log("部署异常");
+    console.log(baseAmount);
+
+    let redpocket;
+    await deployer.deploy(RedPocket, companyAddrs, techAddrs, baseAmount, 10,{
+      gasPrice: web3.utils.toWei('60','gwei')
+    }).then(res=>{
+      redpocket = res;
     });
+
+    console.log("红包合约地址：",redpocket.address);
+    console.log("配置Dapp前端服务");
+    let script = require('../scripts/init_vue_config.js');
+    script.run(network,false,redpocket.address,'');
 };

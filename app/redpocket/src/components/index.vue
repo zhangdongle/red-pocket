@@ -3,52 +3,64 @@
     class="content column align-center center"
     style="position: absolute; left: 30px; right: 30px;"
   >
+    <div class="column" style="position:absolute; right: 0; top: 20px;">
+      <div @click="changeLang()">
+        <span>{{$t('message.convert_lang')}}</span>
+      </div>
+    </div>
     <div class="title-en">
       SIX CONTACTS
     </div>
-    <div style="font-weight: 400; font-size: 48px;">六度红包</div>
-    <div class="text">基于六度人脉理论</div>
-    <div class="text" style="margin-bottom: 25px;">
-      用智能合约来验证你的人际长度
+    <div style="font-weight: 400; font-size: 48px;">{{$t('message.title')}}</div>
+    <div class="text">{{$t('message.title2')}}</div>
+    <div class="text" style="margin-bottom: 25px;white-space: nowrap;">
+      {{$t('message.title3')}}
     </div>
-    <div class="btn2" @click="sendPocket()" v-if="player.level!=9">发红包（{{ player.amount }}{{symbol}}）</div>
-    <div class="btn2" v-if="player.level==9">等待红包</div>
+    <div class="btn2" @click="sendPocket()" v-if="player.level!=9">{{$t('message.send')}}（{{ player.amount }}{{symbol}}）</div>
+    <div class="btn2" v-if="player.level==9">{{$t('message.pending')}}</div>
     <div class="error">{{error}}</div>
     <div class="btn2" @click="copy()">
-      <span>复制游戏邀请链接</span>
+      <span>{{$t('message.copy_link')}}</span>
     </div>
     <div v-if="player.level!=0" style="margin: 0 20px; word-wrap: break-word; text-align: center; ">{{ player.shareUrl }}</div>
     <div style="margin: 0 20px; margin-bottom: 30px; text-align: left;" v-if="player.level==0">
-      发送第一个红包即会出现游戏邀请链接！
+      {{$t('message.copy_warn')}}
     </div>
     <div
       class="column align-start text statistic"
       style="width: 100%; padding: 10px;margin-top:20px;"
     >
       <div class="btn2" style="height: 30px; line-height: 30px; width: 280px;">
-        当前统计
+        {{$t('message.statistics')}}
       </div>
-      <div>邀请人：<span style="font-size:12px; font-weight: 400;">{{ player.referer ? player.referer + "（已绑定）" : referer && player.id == 0 ? referer+'（未绑定）':'无' }}</span></div>
-      <div>目前级：{{ player.level }}</div>
-      <div>当前总人脉数：{{ player.allCount }}</div>
-      <span v-for="(v, i) in player.levelCount" :key="i">
-        {{ i + 1 }}阶人脉数：{{ v }}
-      </span>
+      <div>{{$t('message.invitees')}}：<span style="font-size:12px; font-weight: 400;">{{ player.referer ? player.referer + "（" + $t('message.bound')+"）" : referer && player.id == 0 ? referer+'（'+$t("message.unbound")+'）':$t('message.nothing') }}</span></div>
+      <div>{{$t('message.current_level')}}：{{ player.level }}</div>
+      <div>{{$t('message.total_level_count')}}：{{ player.allCount }}</div>
+      <div v-if="language == 0" class="column">
+        <span v-for="(v, i) in player.levelCount" :key="i">
+          {{ i + 1 }}{{$t('message.level_count')}}：{{ v }}
+        </span>
+      </div>
+      <div v-if="language == 1" class="column">
+        <span v-for="(v, i) in player.levelCount" :key="i">
+          {{$t('message.level_count')}} {{ i + 1 }}：{{ v }}
+        </span>
+      </div>
       <div>
-        累计接收红包数：
+        {{$t('message.received_count')}}：
       </div>
       <div>
         {{player.receivedCount}}
       </div>
       <div>
-        累计接收红包：
+        {{$t('message.received_amount')}}：
       </div>
       <div>
-        {{player.receivedAmount}} USDT
+        {{player.receivedAmount}} {{symbol}}
       </div>
     </div>
     <div class="btn2" style="height: 30px; line-height: 30px; width: 280px;">
-      游戏规则
+      {{$t('message.rules_title')}}
     </div>
     <div
       class="column align-center"
@@ -58,58 +70,7 @@
         class="text"
         style="word-wrap: break-word; white-space: pre-wrap; width: 88%;"
       >
-  1\基于六度人脉理论及以太坊合约算法实现去信任，去中心化运行。
-
-  2\合约地址：{{redpocketAddress}}
-
-  3\参与游戏只需要二个动作，发红包给其他人，邀请其他人参与游戏；之后等待其他人发给你的红包到你的地址。
-
-  4\游戏规则：
-      发送红包约定为100U/个，1个地址最多发送11个红包；接收红包为100U/个；接收红包不限量，接收数量从你开始所产生的邀请关系越多，那么后续你所收到的红包就越多。
-
-      成为v1
-      发送两个红包给其他两个参与地址即可成为v1，此时才可以邀请好友，并获得一阶地址的参与红包。
-      (说明：一阶地址指你邀请的参与地址，二阶地址指你邀请的参与地址 再邀请进来的参与地址，三阶到九阶地址以此类推）
-      成为v2
-      向一个地址发送一个红包并邀请三个地址成为v1，即可成为v2，此时二阶地址要成为v2时，都会向你发送一个红包。（同时享有v1收取的红包权限）
-      成为v3
-      v2后向一个地址发送一个红包，即可成为v3，此时三阶地址要成为v3时，都会向你发送一个红包。（同时享有v1-v2收取的红包权限）
-      成为v4
-      v3后向一个地址发送一个红包，即可成为v4，此时四阶地址要成为v4时，都会向你发送一个红包。（同时享有v1-v3收取的红包权限）
-      成为v5
-      v4后向两个地址发送两个红包，且你的邀请关系队伍中四阶内至少有81个参与游戏的地址用户，即可成为v5，此时五阶地址要成为v5时，都会向你发送一个红包。且五阶地址成为v1时，都会向你发送一个红包。（同时享有v1-v4收取的红包权限）
-      成为v6
-      v5后向一个地址发送一个红包，即可成为v6，此时六阶地址要成为v6时，都会向你发送一个红包。（同时享有v1-v5收取的红包权限）
-      成为v7
-      v6后向一个地址发送一个红包，即可成为v7，此时七阶地址要成为v7时，都会向你发送一个红包。（同时享有v1-v6收取的红包权限）
-      成为v8
-      v7后向一个地址发送一个红包，即可成为v8，此时八阶地址要成为v8时，都会向你发送一个红包。（同时享有v1-v7收取的红包权限）
-      成为v9
-      v8后向两个地址发送两个红包，即可成为v9，此时九阶地址要成为v9时，都会向你发送一个红包。且五阶地址成为v5时，都会向你发送一个红包。（同时享有v1-v8收取的红包权限）
-      
-      超出你的等级所发生的阶梯红包，合约将把红包匹配给技术服务地址作为技术奖励。
-
-  5\游戏理论效果： 
-  每个参与用户若扩散3人且按照规则发送11个红包
-  总发出红包为100Ux11=1100U
-  v1累计收取红包 
-  3x100U=300U
-  v2累计收取红包 
-  （3+9）x100U=1200U 
-  v3累计收取红包
-  （3+9+27）x100U=3900U
-  v4累计收取红包 
-  （3+9+27+81）x100U=12000U
-  v5累计收取红包 
-  （3+9+27+81+243+243）x100U=60600U
-  v6累计收取红包
-  （3+9+27+81+243+243+729）x100U=133500U 
-  v7累计收取红包
-  （3+9+27+81+243+243+729+2187）x100U=352200U 
-  v8累计收取红包
-  （3+9+27+81+243+243+729+2187+6561）x100U=1008300U
-  v9累计收取红包
-  （3+9+27+81+243+243+729+2187+6561+19683+243）x100U=3000900U
+{{$t('message.rules')}}
   </pre>
     </div>
     <div class="toast" v-show="toastShow">
@@ -119,10 +80,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Web3 from 'web3'
 import contract from 'truffle-contract'
 import BN from 'bignumber.js'
-import rpAbi from '../../../../build/contracts/RedPocketOfUSDT.json'
+import rpUDSTAbi from '../../../../build/contracts/RedPocketOfUSDT.json'
+import rpAbi from '../../../../build/contracts/RedPocket.json'
 import tokenAbi from '../../../../build/contracts/TetherToken.json'
 export default {
   name: 'RedPocket',
@@ -154,8 +117,35 @@ export default {
       isTokenMode:false,
       symbol:'',
       toastShow: false,
-      toastText: ''
+      toastText: '',
+      language: 0,
+      lang: [{
+          label: this.$t('message.zh'),       //模板语法的一种
+          value: 0
+        }, {
+          label: this.$t('message.en'),
+          value: 1
+        }],
     }
+  },
+  watch: {    //侦听器
+    language: function (val) {       //侦听单选按钮的变化，从而进行切换语言
+      val === 0 ? this.$i18n.locale = 'zh' : this.$i18n.locale = 'en';
+      Vue.set(this.lang, 0, {label: this.$t('message.zh'), value: 0});
+      Vue.set(this.lang, 1, {label: this.$t('message.en'), value: 1})
+      /**
+      this.lang: [{
+        label: this.$t('message.zh'),       //如果不使用Vue.set，也可以使用更新数据的方法
+        value: 0
+      }, {
+        label: this.$t('message.en'),
+        value: 1
+      }]
+      **/
+    }
+  },
+  mounted() {
+    this.$i18n.locale === 'zh' ? this.language = 0 : this.language = 1   //数据加载时判断当前属于哪种语言，为其单选按钮赋值
   },
   async created() {
     this.initDomain();
@@ -179,6 +169,10 @@ export default {
     }, 500);
   },
   methods: {
+    changeLang:function(){
+      this.language = this.language == 0 ? 1 : 0;
+      // window.location.reload();
+    },
     toast (e) {
       let self = this
       self.toastText = e
@@ -187,13 +181,20 @@ export default {
         self.toastShow = false
       }, 1500)
     },
+    showError(err){
+      this.error = err;
+      let that = this;
+      setTimeout(function(){
+        that.error = '';
+      },1500);
+    },
     copy:function(){
       if(this.player.id==0){
         return;
       }
       let container = this.$refs.container
       this.$copyText(this.player.shareUrl, container)
-      this.toast('复制成功');
+      this.showError(this.$t('message.copy_success'));
     },
     getUrlKey: function (name) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || ["",""])[1].replace(/\+/g, '%20')) || null
@@ -210,6 +211,13 @@ export default {
       }
     },
     sendByETH:async function(){
+      let balance = this.web3.utils.fromWei(await this.web3.eth.getBalance(this.account));
+      console.log('余额', BN(balance).toFixed(), this.player.amount);
+      if(balance < this.player.amount){
+        this.showError(this.$t('message.balance_low'));
+        return;
+      }
+
       let nonce = await this.web3.eth.getTransactionCount(this.account);
       console.log("nonce",nonce);
       if(nonce!=0){
@@ -219,18 +227,25 @@ export default {
         from: this.account,
         value: this.web3.utils.toWei(this.player.amount+'','ether'),
         nonce: nonce,
-        gas: 600000
+        gas: 400000
       }).then(()=>{
         console.log("刷新玩家信息");
         this.initPlayerState();
       }).catch(err=>{
         if(err.reason === 'Not up to standard'){
-          this.error = '1-4阶邀请人数不足';
+          this.showError(this.$t('message.upgrade_error_v5'));
         }
         console.log("合约调用异常",err);
       });
     },
     sendByToken:async function(){
+      // 查询代币余额
+      let balance = await this.token.balanceOf(this.account);
+      console.log('余额', BN(balance).toFixed(), this.player.amount);
+      if(balance < this.player.amount){
+        this.showError(this.$t('message.balance_low'));
+        return;
+      }
       let amount = BN(this.player.amount).multipliedBy(10**6).toFixed();
       let allowance = await this.token.allowance(this.account,this.redpocketAddress);
       if(allowance > 0){
@@ -254,7 +269,7 @@ export default {
           this.initPlayerState();
       }).catch(err=>{
         if(err.reason === 'Not up to standard'){
-          this.error = '未满足升级条件';
+          this.showError(this.$t('message.upgrade_error_v5'));
         }
         console.log("合约调用异常",err);
       });
@@ -267,12 +282,17 @@ export default {
       console.log("发送金额",this.player.amount);
       // 升v2、v5前检查推广条件
       if(this.player.level == 1 && this.player.directPushs.length<3){
-        this.error = '升2阶需要直推最少3人';
+        this.showError(this.$t('message.upgrade_error_v2'));
         return;
       }
-      if(this.player.level == 4 && this.player.allCount < 5){
-        this.error = '1-4阶邀请人数不足';
-        return;
+      console.log("levelCount:",this.player.levelCount);
+      let count = parseInt(this.player.levelCount[0])+parseInt(this.player.levelCount[1])+parseInt(this.player.levelCount[2])+parseInt(this.player.levelCount[3]);
+      console.log("count:",count);
+      if(this.player.level == 4){
+        if(count < 81){
+          this.showError(this.$t('message.upgrade_error_v5'));
+          return;
+        }
       }
       if(this.isTokenMode){
         this.sendByToken();
@@ -296,25 +316,33 @@ export default {
           'http://192.168.1.118:7545',
         )
       }
+      console.log('provider',this.provider);
       this.web3 = new Web3(this.provider)
       this.web3.eth.getAccounts().then((accs) => {
         this.account = accs[0]
       })
     },
     initContract: async function () {
-      this.isTokenMode = process.env.VUE_APP_TOKEN_MODE;
-      this.symbol = this.isTokenMode?'USDT':'ETH';
+      this.isTokenMode = process.env.VUE_APP_TOKEN_MODE === 'true';
+      console.log("合约版本：", this.isTokenMode );
+      this.symbol = this.isTokenMode ? 'USDT':'ETH';
+
       this.redpocketAddress = process.env.VUE_APP_REDPOCKET_ADDRESS;
-      this.tokenAddress = process.env.VUE_APP_TOKEN_ADDRESS;
-      console.log("红包合约地址：",this.redpocketAddress);
-      console.log("代币合约地址：",this.tokenAddress);
-      const RedPocketContract = contract(rpAbi)
-      const TokenContract = contract(tokenAbi)
+      let RedPocketContract = contract(rpAbi);
+      
+
+      if(this.isTokenMode){
+        this.tokenAddress = process.env.VUE_APP_TOKEN_ADDRESS;
+        const TokenContract = contract(tokenAbi)
+        TokenContract.setProvider(this.provider)
+        this.token = await TokenContract.at(this.tokenAddress)
+        console.log("代币合约地址：",this.tokenAddress);
+        RedPocketContract = contract(rpUDSTAbi);
+      }
+
       RedPocketContract.setProvider(this.provider)
-      TokenContract.setProvider(this.provider)
-      // this.redpocket = await RedPocketContract.deployed()
       this.redpocket = await RedPocketContract.at(this.redpocketAddress)
-      this.token = await TokenContract.at(this.tokenAddress)
+      
     },
     initConfigState: async function(){
       if(this.isTokenMode){

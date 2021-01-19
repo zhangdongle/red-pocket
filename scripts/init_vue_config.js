@@ -37,13 +37,13 @@ function run(env,tokenMode,redpocketAddress,tokenAddress){
     console.log("文件不存在",e);
   }
   
-  if(tokenMode){
+  if(tokenMode!=undefined){
     options['VUE_APP_TOKEN_MODE'] =  tokenMode;
   }
   if(redpocketAddress){
     options['VUE_APP_REDPOCKET_ADDRESS'] =  redpocketAddress;
   }
-  if(tokenAddress){
+  if(tokenAddress!=undefined){
     options['VUE_APP_TOKEN_ADDRESS'] =  tokenAddress;
   }
   // console.log("写入配置文件内容前：", options);
